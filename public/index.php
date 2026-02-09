@@ -17,3 +17,7 @@ $config = require ROOT_DIR . 'config.php';
 // 3. Carga del autoloader
 require_once ROOT_DIR . 'clases/Core/Autoloader.php';
 Core\Autoloader::init(ROOT_DIR . 'clases/');
+
+use Core\Application;
+
+$app = new Core\Application($config);
