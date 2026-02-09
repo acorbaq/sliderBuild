@@ -12,7 +12,7 @@ declare(strict_types=1);
 define('ROOT_DIR', __DIR__ . '/../');
 define('PUBLIC_DIR', __DIR__ . '//');
 // 2. Carga de la configuración
-require_once ROOT_DIR . 'config.php';
+$config = require ROOT_DIR . 'config.php';
 
 // 3. Carga del autoloader
 require_once ROOT_DIR . 'clases/Core/Autoloader.php';
