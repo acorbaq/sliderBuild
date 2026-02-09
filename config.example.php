@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 return [
+    // Definimos si el slider toma datos desde assets/images, desde la API de Joomla o ambas.
+    'data_source' => 'both', // opciones: 'assets', 'joomla', 'both'
+
     // URL base de Joomla donde se encuentra el endpoint del slider
     'joomla_base_url' => 'http://localhost/Joomla/index.php',
 
