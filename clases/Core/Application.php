@@ -18,9 +18,20 @@ class Application
     protected ?AssetsClient $assetsClient = null;
     protected ?JoomlaClient $joomlaClient = null;
 
+    // variable section
+    protected array $section = array(
+        'type' => 'home', // home, categoria o busqueda
+        'section' => 'Últimos Productos', // nombre de la categoria, nombre del producto o termino de busqueda )
+        'filters' => '', // array de filtros (precio, marca, etc.
+    );
+
     public function __construct(array $config)
     {
         $this->config = $config;
+
+        if ($config['url_transform']) {
+            $this->parseUrl();
+        }
 
         // Inicializar clientes de datos según configuración
         if ($config['data_source'] === 'assets' || $config['data_source'] === 'both') {
@@ -51,5 +62,23 @@ class Application
         if ($this->assetsClient) {
             $products = array_merge($products, $this->assetsClient->getProducts($section));
         }
+    }
+
+    protected function parseUrl(): void
+    {
+        $url = $_SERVER['REQUEST_URI'];
+        $urlParts = explode('index.php', $url);
+        $urlContent = explode('/', $urlParts[1]);
+        $urlType = urldecode($urlContent[1]);
+        $urlSection = urldecode($urlContent[2]);
+        $urlFilters = '';
+        if (count($urlContent) > 3) {
+            $urlFilters = urldecode(implode('/', array_slice($urlContent, 3)));
+        }
+        $this->section = array(
+            'type' => urldecode($urlType), // home, categoria o busqueda
+            'section' => urldecode($urlSection), // nombre de la categoria, nombre del producto o termino de busqueda )
+            'filters' => urldecode($urlFilters), // array de filtros (precio, marca, etc.
+        );
     }
 }
