@@ -42,16 +42,15 @@ class JoomlaClient
 
             if (json_last_error() === JSON_ERROR_NONE) {
                 // Todo OK
-                print_r($data);
             } else {
                 echo "Error: La respuesta no es un JSON válido. Revisa si hay errores PHP en el emisor.";
             }
         } else {
             echo "Error en la conexión. Código HTTP: " . $http_code;
         }
-
+        $processedData = $this->processProducts($data);
         // Si todo Ok sedevuelve array data
-        return $data ?? [];
+        return $processedData;
     }
 
     // Metodo para construir la url de consulta
@@ -85,6 +84,8 @@ class JoomlaClient
                 ];
                 if (!empty($section['filters'])) {
                     $this->baseUrl .= '/' . $section['filters'];
+                } else {
+                    $this->baseUrl .= '/results,1-4';
                 }
                 $url = $this->baseUrl . '?' . http_build_query($params);
                 return $url;
@@ -93,5 +94,24 @@ class JoomlaClient
                 header('Location:' . $this->baseUrl);
                 return $this->baseUrl;
         }
+    }
+
+    /**
+     * Metodo para devolver productos con: nombre, precio, imagen, link y categoria
+     */
+    protected function processProducts(array $data): array
+    {
+        $processed = [];
+        foreach ($data['products'] ?? [] as $product) {
+            $processed[] = [
+                'nombre' => $product['name'] ?? '',
+                'precio' => $product['price'] ?? '',
+                'img' => $product['image'] ?? '',
+                'link' => $product['link'] ?? '',
+                'moneda' => $product['moneda'] ?? '',
+                'categoria' => $data['section'] ?? '',
+            ];
+        }
+        return $processed;
     }
 }

@@ -16,5 +16,6 @@ class AssetsClient
     public function __construct()
     {
         $this->assetsDir = ROOT_DIR . 'assets/images/';
+        echo "AssetsClient initialized with assets directory: {$this->assetsDir}\n";
     }
 }
