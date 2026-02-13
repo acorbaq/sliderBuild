@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Slider Ofertas</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #333; /* Fondo oscuro para resaltar el slider */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .slide {
+        /* no mostrar por defecto */
+        display: none;
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      .slider-container {
+        width: 100%;
+        max-width: 1080px;
+        aspect-ratio: 9/16;
+        background: #fff;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* HEADER Y LOGO */
+      .header {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        height: 200px;
+        background: #ea261a;
+        display: flex;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .logo-shape {
+        position: absolute;
+        left: 40px;
+        top: -25px; /* Sobresale por arriba y abajo */
+        width: 225px;
+        height: 250px;
+        background: #ea261a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+        font-weight: bold;
+        color: white;
+        border-radius: 12px;
+        z-index: 11;
+      }
+
+      .logo-image {
+        position: absolute;
+        left: 40px;
+        top: -25px; /* Sobresale por arriba y abajo */
+        width: 225px;
+        height: 250px;
+        /* asegurar que la imagen no se corte y mantenga su proporción */
+        object-fit: contain;
+        border-radius: 12px;
+        z-index: 11;
+      }
+
+      .oferta-text {
+        margin-left: 300px; /* Espacio para el logo */
+        font-size: 75px;
+        font-weight: bold;
+        color: #fbfbfb;
+        text-transform: uppercase;
+      }
+
+      /* NOMBRE DEL PRODUCTO - POSICIÓN FIJA */
+      .product-name {
+        position: absolute;
+        z-index: 2;
+        top: 275px; /* Justo debajo del área del header */
+        width: 100%;
+        padding: 0 50px;
+        text-align: center;
+        font-size: 70px; /* Ajustado para que quepan varias líneas si es necesario */
+        font-weight: bold;
+        color: #333;
+        line-height: 1.1;
+        height: 250px; /* Altura fija para el área de texto */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* IMAGEN - CENTRADA EN EL ESPACIO RESTANTE */
+      .product-image {
+        position: absolute;
+        z-index: 1;
+        top: 525px; /* Empieza después del nombre */
+        left: 50%;
+        transform: translateX(-50%);
+        height: 990px; /* Espacio vertical reservado para la imagen */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Evita que la imagen se deforme */
+      }
+
+      /* PRECIO - SIEMPRE ABAJO */
+      .price-container {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(
+          -50%
+        ); /* Centra todo el bloque respecto al cartel */
+        display: flex;
+        align-items: flex-start; /* Alinea el símbolo arriba o usa 'baseline' según prefieras */
+        justify-content: center;
+        white-space: nowrap; /* Evita que el precio se rompa en dos líneas */
+      }
+      .price-container {
+        position: absolute;
+        bottom: 120px; /* Espacio respecto al borde inferior */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: flex-start; /* Alinea los céntimos a la parte superior del número grande */
+        white-space: nowrap;
+      }
+
+      .price-main {
+        font-size: 350px; /* Tamaño masivo para los euros */
+        font-weight: 900;
+        color: #ea261a;
+        line-height: 0.8;
+        letter-spacing: -15px;
+        text-shadow: 4px 4px 0px #bdbdbd;
+      }
+
+      .price-currency {
+        font-size: 70px;
+        font-weight: bold;
+        font-family: sans-serif; /* O la fuente impactante que uses */
+        color: #ea261a; /* Un gris oscuro para que no compita tanto con el rojo */
+        margin-top: 5px;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slider-container" id="slider"></div>
+    <script>
+      // Datos de ejemplo (Esto vendría de tu fetch/página web)
+      const datosWeb = {{datosWeb}};
+
+      const slider = document.getElementById("slider");
+
+      function renderSlides() {
+        datosWeb.forEach((prod, index) => {
+          const slide = document.createElement("div");
+          slide.className = `slide ${index === 0 ? "active" : ""}`;
+
+          slide.innerHTML = `
+            <div class="header">
+              <div class="logo-container">
+                <img class="logo-image" src="http://localhost/sliderBuild/assets/images/base/Logo_web.svg" alt="Logo de la tienda">
+              </div>
+              <div class="oferta-text">${prod.categoria}</div>
+              </div><div class="producto-content">
+              <div class="product-name">
+                ${prod.nombre}
+              </div>
+              <div class="product-image">
+                <img src="${prod.img}" alt="${prod.nombre}" />
+              </div>
+              <div class="price-container">
+                <div class="price-main">${prod.precio}</div>
+                <div class="price-currency">${prod.moneda}</div>
+              </div>
+            </div>
+            `;
+          slider.appendChild(slide);
+        });
+      }
+
+      function startSlider() {
+        const slides = document.querySelectorAll(".slide");
+        let current = 0;
+
+        setInterval(() => {
+          slides[current].classList.remove("active");
+          current = (current + 1) % slides.length;
+          slides[current].classList.add("active");
+        }, 5000); // 5 segundos por oferta
+      }
+
+      // Inicializar
+      renderSlides();
+      startSlider();
+    </script>
+  </body>
+</html>
