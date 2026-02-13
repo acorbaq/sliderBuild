@@ -11,6 +11,7 @@ namespace Core;
 
 use Data\AssetsClient;
 use Data\JoomlaClient;
+use Slides\Slide;
 
 class Application
 {
@@ -41,17 +42,14 @@ class Application
         if ($config['data_source'] === 'joomla' || $config['data_source'] === 'both') {
             $this->joomlaClient = new JoomlaClient($config['joomla_base_url'], $config['token']);
         }
+        $this->getSlides($this->section);
     }
 
     /**
      * Devuelve un array de objetos Slide para la sección actual
      */
-    public function getSlides(string $section): array
+    public function getSlides(array $section): void
     {
-        if ($slidesData !== null) {
-            return $this->buildSlideObjects($slidesData);
-        }
-
         // Obtener productos desde clientes de datos
         $products = [];
 
@@ -62,8 +60,13 @@ class Application
         if ($this->assetsClient) {
             $products = array_merge($products, $this->assetsClient->getProducts($section));
         }
+
+        // Aqui se aplican las reglas para decidir que Slide mostrar.
+        $slide = new Slide();
+        echo $slide->renderScreen($products);
     }
 
+    // Método para parsear la URL y extraer la sección y filtros
     protected function parseUrl(): void
     {
         $url = $_SERVER['REQUEST_URI'];
