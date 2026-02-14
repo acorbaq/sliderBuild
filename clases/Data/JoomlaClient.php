@@ -77,10 +77,11 @@ class JoomlaClient
                     $hash_key => $this->token,
                     'section' => urlencode($sectionName),
                 ];
-                $url = $this->baseUrl . '/' . $section['section']  . '?' . http_build_query($params);
+                $url = $this->baseUrl . '/' . $section['section'] . '/';
                 if (!empty($section['filters'])) {
-                    $this->baseUrl .= '/' . $section['filters'];
+                    $url .= $section['filters'];
                 }
+                $url .= '?' . http_build_query($params);
                 return $url;
                 break;
             case 'busqueda':

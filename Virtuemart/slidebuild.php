@@ -23,7 +23,7 @@ if (empty($section)) {
     } else {
         // obtenenemos la URL hacemos split por / y elminiamos del array las partes vacias y que contengasn dirAsc o ,
         $urlParts = array_filter(explode('/', $uri->toString()), function ($part) {
-            return !empty($part) && strpos($part, 'dirAsc') === false && strpos($part, ',') === false;
+            return !empty($part) && strpos($part, 'dirAsc') === false && strpos($part, ',') === false && strpos($part, '?') === false;
         });
         $section = end($urlParts);
     };
