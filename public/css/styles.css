@@ -12,6 +12,15 @@ body {
   min-height: 100vh;
 }
 
+.slide {
+  /* no mostrar por defecto */
+  display: none;
+}
+
+.slide.active {
+  display: block;
+}
+
 .slider-container {
   width: 100%;
   max-width: 1080px;

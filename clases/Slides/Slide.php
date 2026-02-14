@@ -10,6 +10,12 @@ namespace Slides;
 
 class Slide
 {
+    private array $config;
+
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
     // Método para renderizar la pantalla de cada slide a partir de la plantilla HTML
     public function renderScreen(array $datosWeb): string
     {
@@ -24,10 +30,12 @@ class Slide
         } else {
             $titulo = '';
         }
+
+        $cssUrl = $this->config['base_url'] . 'css/styles.css';
         // Reemplazar placeholders con datos del producto
         $rendered = str_replace(
-            ['{{datosWeb}}', '{{titulo}}'],
-            [json_encode($datosWeb), $titulo],
+            ['{{datosWeb}}', '{{titulo}}', '{{cssUrl}}'],
+            [json_encode($datosWeb), $titulo, $cssUrl],
             $template
         );
 
