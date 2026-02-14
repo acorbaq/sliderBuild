@@ -78,6 +78,8 @@ class Application
         if (count($urlContent) > 3) {
             $urlFilters = urldecode(implode('/', array_slice($urlContent, 3)));
         }
+        // Si urlSection tiene ~ sustituirlo por / (consultas en las que se requiere la sección padre)
+        $urlSection = str_replace('~', '/', $urlSection);
         $this->section = array(
             'type' => urldecode($urlType), // home, categoria o busqueda
             'section' => urldecode($urlSection), // nombre de la categoria, nombre del producto o termino de busqueda )

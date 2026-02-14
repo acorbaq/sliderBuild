@@ -16,10 +16,18 @@ class Slide
         // Cargar plantilla HTML
         $template = file_get_contents(__DIR__ . '/../../vistas/screens/screen_template.html');
 
+        // Si existe get titulo, lo asignamos a la variable titulo que se usará en el slider
+        if (isset($_GET['titulo'])) {
+            $titulo = urldecode($_GET['titulo']);
+            // explode por / y obtener solo la primera parte para evitar problemas con caracteres especiales en el título
+            $titulo = explode('/', $titulo)[0];
+        } else {
+            $titulo = '';
+        }
         // Reemplazar placeholders con datos del producto
         $rendered = str_replace(
-            ['{{datosWeb}}'],
-            [json_encode($datosWeb)],
+            ['{{datosWeb}}', '{{titulo}}'],
+            [json_encode($datosWeb), $titulo],
             $template
         );
 

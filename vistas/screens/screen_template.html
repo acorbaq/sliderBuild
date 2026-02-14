@@ -171,6 +171,7 @@
     <script>
       // Datos de ejemplo (Esto vendría de tu fetch/página web)
       const datosWeb = {{datosWeb}};
+      const titulo = "{{titulo}}"; // Si quieres usar el título en algún lugar del slider o para categorizarlo
 
       const slider = document.getElementById("slider");
 
@@ -184,7 +185,7 @@
               <div class="logo-container">
                 <img class="logo-image" src="http://localhost/sliderBuild/assets/images/base/Logo_web.svg" alt="Logo de la tienda">
               </div>
-              <div class="oferta-text">${prod.categoria}</div>
+              <div class="oferta-text">${titulo ? titulo : prod.categoria}</div>
               </div><div class="producto-content">
               <div class="product-name">
                 ${prod.nombre}

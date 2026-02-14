@@ -66,14 +66,21 @@ class JoomlaClient
                 return $this->baseUrl . '?' . http_build_query($params);
                 break;
             case 'categoria':
+                // Si al hacer split de $section['section'] por / el resultado tiene más de 2 partes usar la segunda parte como seccion del get
+                $parts = explode('/', $section['section']);
+                if (count($parts) >= 2) {
+                    $sectionName = $parts[1];
+                } else {
+                    $sectionName = $section['section'];
+                }
                 $params = [
                     $hash_key => $this->token,
-                    'section' => urlencode($section['section']),
+                    'section' => urlencode($sectionName),
                 ];
+                $url = $this->baseUrl . '/' . $section['section']  . '?' . http_build_query($params);
                 if (!empty($section['filters'])) {
                     $this->baseUrl .= '/' . $section['filters'];
                 }
-                $url = $this->baseUrl . '/' . urlencode($section['section'])  . '?' . http_build_query($params);
                 return $url;
                 break;
             case 'busqueda':
@@ -104,14 +111,28 @@ class JoomlaClient
         $processed = [];
         foreach ($data['products'] ?? [] as $product) {
             $processed[] = [
-                'nombre' => $product['name'] ?? '',
+                'nombre' => $this->cleanProductName($product['name'] ?? ''),
                 'precio' => $product['price'] ?? '',
                 'img' => $product['image'] ?? '',
                 'link' => $product['link'] ?? '',
                 'moneda' => $product['moneda'] ?? '',
-                'categoria' => $data['section'] ?? '',
+                'categoria' => $this->normalizeSection($data['section'] ?? ''),
             ];
         }
         return $processed;
+    }
+
+    // Metodo para cambia - por  ' ' en el nombre de la sección y limpiar la categoria de resultados o busqueda ej. "results,1-4"
+    protected function normalizeSection(string $section): string
+    {
+        $normalized = str_replace(['-'], [' '], $section);
+        return ucwords($normalized);
+    }
+
+    // Metodo para eliminar `* ` y `*` de los nombres de los productos, ya que a veces vienen con esos caracteres por temas de formato en Joomla
+    protected function cleanProductName(string $name): string
+    {
+        $cleaned = str_replace(['* ', '*'], '', $name);
+        return $cleaned;
     }
 }
