@@ -1,13 +1,6 @@
 <?php
 
 /**
- * Editar archivo '/components/com_virtuemart/sublayouts/products.php' haciendo una copia en template personalizado
- * El achivo debe quedar ubicado en '/templates/tu_template/html/com_virtuemart/sublayouts/products.php'
- * En la ultima linea antes del cierre incluit 'echo shopFunctionsF::renderVmSubLayout('sliderbuild', array('products' => $products, 'currency' => $currency, 'section' => $productTitle));
- * Con esto generaras un endpoint validado por get dinamico en todas la vistas que usen ese sublayout y podras obtener
- * los datos de los productos en formato JSON para alimentar un slider o sistema de pantallas externo.
- * -------------------------------------
- * -------------------------------------
  * Sublayout para exportación de datos JSON a sistema de pantallas (Slider)
  * Acceso: ?[hash_dia]=[token]
  **/
@@ -26,14 +19,23 @@ if (empty($section)) {
     $keyword = $uri->getVar('keyword');
     if ($keyword) {
         $section = $keyword;
+        $section = str_replace([' '], ['+'], $section);
     } else {
         $path = explode('/', trim($uri->getPath(), '/'));
         $section = end($path);
-    }
-    $section = ucwords(str_replace(['-', 'results', ','], [' ', '', ' '], $section));
+    };
 }
 
+// Normalizar quitando tildes y espacios ej. Si section es "Últimos productos" normalizarla y devolver "ultimos-productos" para que coincida con la sección home
+$section = strtolower($section);
+$section = str_replace(['Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú'], ['a', 'a', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u'], $section);
+$section = str_replace([' ',], ['-'], $section);
+
 $getSection = isset($_GET['section']) ? urldecode($_GET['section']) : '';
+if (isset($_GET['keyword'])) {
+    $getSection = str_replace([' '], ['+'], $getSection);
+}
+
 // 2. Validación de acceso
 // Verificamos si existe $_GET['hash_del_dia'] y si su valor es 'sliderDataToken'
 if (isset($_GET[$validGet]) && $_GET[$validGet] === $token && $getSection === $section) {
@@ -95,14 +97,16 @@ if (isset($_GET[$validGet]) && $_GET[$validGet] === $token && $getSection === $s
             }
         }
 
-        $precioFinalTexto = number_format((float)$precioCalculado, 2, ',', '.') . ' €' . $tipoPeso;
+        $precioFinalTexto = number_format((float)$precioCalculado, 2, ',', '.');
+        $moneda = '€' . $tipoPeso;
 
         $allSliderProducts[] = [
             'name'  => $product->product_name,
             'price' => $precioFinalTexto,
             'link'  => $product->link,
             // Usamos file_url para máxima calidad en pantallas grandes
-            'image' => isset($product->images[0]) ? JURI::root() . $product->images[0]->file_url : ''
+            'image' => isset($product->images[0]) ? JURI::root() . $product->images[0]->file_url : '',
+            'moneda' => $moneda
         ];
     }
 
@@ -115,6 +119,24 @@ if (isset($_GET[$validGet]) && $_GET[$validGet] === $token && $getSection === $s
     ], JSON_UNESCAPED_UNICODE);
 
     echo $jsonOutput;
+
+    // 4. Detener todo inmediatamente
+    $app = JFactory::getApplication();
+    $app->close();
+} elseif (isset($_GET[$validGet]) && $_GET[$validGet] === $token) {
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
+    // 3. Forzar el inicio de un buffer nuevo para asegurar limpieza total
+    ob_start();
+
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'error' => 'Sección no válida',
+        'expected_section' => $section,
+        'received_section' => $getSection
+    ], JSON_UNESCAPED_UNICODE);
 
     // 4. Detener todo inmediatamente
     $app = JFactory::getApplication();
