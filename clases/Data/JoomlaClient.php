@@ -85,10 +85,11 @@ class JoomlaClient
                 return $url;
                 break;
             case 'busqueda':
+                $sectionName = strtolower($section['section']);
                 $params = [
                     $hash_key => $this->token,
-                    'section' => urlencode($section['section']),
-                    'keyword' => urlencode($section['section']),
+                    'section' => urlencode($sectionName),
+                    'keyword' => urlencode($sectionName),
                 ];
                 if (!empty($section['filters'])) {
                     $this->baseUrl .= '/' . $section['filters'];
