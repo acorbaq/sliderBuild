@@ -21,8 +21,11 @@ if (empty($section)) {
         $section = $keyword;
         $section = str_replace([' '], ['+'], $section);
     } else {
-        $path = explode('/', trim($uri->getPath(), '/'));
-        $section = end($path);
+        // obtenenemos la URL hacemos split por / y elminiamos del array las partes vacias y que contengasn dirAsc o ,
+        $urlParts = array_filter(explode('/', $uri->toString()), function ($part) {
+            return !empty($part) && strpos($part, 'dirAsc') === false && strpos($part, ',') === false;
+        });
+        $section = end($urlParts);
     };
 }
 
