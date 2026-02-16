@@ -72,7 +72,7 @@ class Slide
                 $prod['active'] = 'active';
                 $primerProducto = false;
             } else {
-                $prod['active'] = '';
+                $prod['active'] = 'inactive';
             }
             $slide = str_replace(
                 ['{{logoUrl}}', '{{titulo}}', '{{nombre}}', '{{img}}', '{{precio}}', '{{moneda}}', '{{active}}'],

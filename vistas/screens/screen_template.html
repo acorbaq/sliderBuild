@@ -6,6 +6,7 @@
     <style>
       :root {
         --color-main: {{mainColor}};
+        --animation-time: 1s;
       }
     </style>
     <link rel="stylesheet" href="{{cssUrl}}" />
@@ -21,7 +22,14 @@
 
         setInterval(() => {
           slides[current].classList.remove("active");
+          slides[current].classList.add("inactive");
+          const randomTime = (Math.random() * 0.6 + 0.9).toFixed(2) + "s";
+          document.documentElement.style.setProperty(
+            "--animation-time",
+            randomTime,
+          );
           current = (current + 1) % slides.length;
+          slides[current].classList.remove("inactive");
           slides[current].classList.add("active");
         }, 5000); // 5 segundos por oferta
       }

@@ -112,6 +112,8 @@ class JoomlaClient
     {
         $processed = [];
         foreach ($data['products'] ?? [] as $product) {
+            // Separar precio en unidades y centimos viene como 12,34 devolver 12 y 34 por separado para mostrarlo con diferente tamaño en el slider
+            $valores = explode(',', $product['price'] ?? '');
             $processed[] = [
                 'nombre' => $this->cleanProductName($product['name'] ?? ''),
                 'precio' => $product['price'] ?? '',
@@ -119,6 +121,7 @@ class JoomlaClient
                 'link' => $product['link'] ?? '',
                 'moneda' => $product['moneda'] ?? '',
                 'categoria' => $this->normalizeSection($data['section'] ?? ''),
+                'valores' => $valores
             ];
         }
         return $processed;

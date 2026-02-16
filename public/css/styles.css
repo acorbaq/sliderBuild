@@ -105,7 +105,7 @@ body {
 .product-image {
   position: absolute;
   z-index: 1;
-  top: 525px; /* Empieza después del nombre */
+  top: 475px; /* Empieza después del nombre */
   left: 50%;
   transform: translateX(-50%);
   height: 990px; /* Espacio vertical reservado para la imagen */
@@ -131,15 +131,7 @@ body {
   align-items: flex-start; /* Alinea el símbolo arriba o usa 'baseline' según prefieras */
   justify-content: center;
   white-space: nowrap; /* Evita que el precio se rompa en dos líneas */
-}
-.price-container {
-  position: absolute;
-  bottom: 120px; /* Espacio respecto al borde inferior */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: flex-start; /* Alinea los céntimos a la parte superior del número grande */
-  white-space: nowrap;
+  z-index: 2;
 }
 
 .price-main {
@@ -161,4 +153,26 @@ body {
   ); /* Un gris oscuro para que no compita tanto con el rojo */
   margin-top: 5px;
   text-transform: uppercase;
+}
+
+/* ANIMACIONES ACTIVE -> INACTIVE */
+.slide.inactive .product-image img {
+  opacity: 0;
+}
+
+/* Cuando el slide está activo */
+.slide.active .product-image img {
+  animation: fadeInRight var(--animation-time) ease forwards;
+}
+
+/* Animaciones */
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
