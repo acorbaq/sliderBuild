@@ -69,7 +69,7 @@ class JoomlaClient
                 // Si al hacer split de $section['section'] por / el resultado tiene más de 2 partes usar la segunda parte como seccion del get
                 $parts = explode('/', $section['section']);
                 if (count($parts) >= 2) {
-                    $sectionName = $parts[1];
+                    $sectionName = end($parts);
                 } else {
                     $sectionName = $section['section'];
                 }
@@ -127,7 +127,7 @@ class JoomlaClient
     // Metodo para cambia - por  ' ' en el nombre de la sección y limpiar la categoria de resultados o busqueda ej. "results,1-4"
     protected function normalizeSection(string $section): string
     {
-        $normalized = str_replace(['-'], [' '], $section);
+        $normalized = str_replace(['-', '+'], [' ', ' '], $section);
         return ucwords($normalized);
     }
 

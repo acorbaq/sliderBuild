@@ -1,9 +1,18 @@
-<div class="slide-inner">
-  <div class="slide-header">{{header}}</div>
-  <div class="slide-category">{{category}}</div>
-  <div class="slide-name">{{name}}</div>
-  <div class="slide-image-wrapper">
-    <img src="{{image_url}}" alt="{{name}}" />
+<div class="slide {{active}}">
+  <div class="header">
+    <div class="logo-container">
+      <img class="logo-image" src="{{logoUrl}}" alt="Logo de la tienda" />
+    </div>
+    <div class="oferta-text">{{titulo}}</div>
   </div>
-  <div class="slide-price">{{price}}</div>
+  <div class="producto-content">
+    <div class="product-name">{{nombre}}</div>
+    <div class="product-image">
+      <img src="{{img}}" alt="{{nombre}}" />
+    </div>
+    <div class="price-container">
+      <div class="price-main">{{precio}}</div>
+      <div class="price-currency">{{moneda}}</div>
+    </div>
+  </div>
 </div>

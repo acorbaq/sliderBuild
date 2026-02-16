@@ -62,7 +62,7 @@ class Application
         }
 
         // Aqui se aplican las reglas para decidir que Slide mostrar.
-        $slide = new Slide($this->config);
+        $slide = new Slide($this->config, 'screen');
         echo $slide->renderScreen($products);
     }
 

@@ -37,7 +37,10 @@ body {
   left: 0;
   width: 100%;
   height: 200px;
-  background: #ea261a;
+  background: var(
+    --color-main,
+    #ea261a
+  ); /* Usar la variable CSS para el color principal */
   display: flex;
   align-items: center;
   z-index: 10;
@@ -49,7 +52,7 @@ body {
   top: -25px; /* Sobresale por arriba y abajo */
   width: 225px;
   height: 250px;
-  background: #ea261a;
+  background: var(--color-main, #ea261a);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,7 +145,7 @@ body {
 .price-main {
   font-size: 350px; /* Tamaño masivo para los euros */
   font-weight: 900;
-  color: #ea261a;
+  color: var(--color-main, #ea261a);
   line-height: 0.8;
   letter-spacing: -15px;
   text-shadow: 4px 4px 0px #bdbdbd;
@@ -152,7 +155,10 @@ body {
   font-size: 70px;
   font-weight: bold;
   font-family: sans-serif; /* O la fuente impactante que uses */
-  color: #ea261a; /* Un gris oscuro para que no compita tanto con el rojo */
+  color: var(
+    --color-main,
+    #ea261a
+  ); /* Un gris oscuro para que no compita tanto con el rojo */
   margin-top: 5px;
   text-transform: uppercase;
 }

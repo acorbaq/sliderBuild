@@ -3,44 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>Slider Ofertas</title>
+    <style>
+      :root {
+        --color-main: {{mainColor}};
+      }
+    </style>
     <link rel="stylesheet" href="{{cssUrl}}" />
   </head>
   <body>
-    <div class="slider-container" id="slider"></div>
+    <div class="slider-container" id="slider">{{slides}}</div>
     <script>
-      // Datos de ejemplo (Esto vendría de tu fetch/página web)
-      const datosWeb = {{datosWeb}};
-      const titulo = "{{titulo}}"; // Si quieres usar el título en algún lugar del slider o para categorizarlo
-
       const slider = document.getElementById("slider");
-
-      function renderSlides() {
-        datosWeb.forEach((prod, index) => {
-          const slide = document.createElement("div");
-          slide.className = `slide ${index === 0 ? "active" : ""}`;
-
-          slide.innerHTML = `
-            <div class="header">
-              <div class="logo-container">
-                <img class="logo-image" src="http://localhost/sliderBuild/assets/images/base/Logo_web.svg" alt="Logo de la tienda">
-              </div>
-              <div class="oferta-text">${titulo ? titulo : prod.categoria}</div>
-              </div><div class="producto-content">
-              <div class="product-name">
-                ${prod.nombre}
-              </div>
-              <div class="product-image">
-                <img src="${prod.img}" alt="${prod.nombre}" />
-              </div>
-              <div class="price-container">
-                <div class="price-main">${prod.precio}</div>
-                <div class="price-currency">${prod.moneda}</div>
-              </div>
-            </div>
-            `;
-          slider.appendChild(slide);
-        });
-      }
 
       function startSlider() {
         const slides = document.querySelectorAll(".slide");
@@ -53,8 +26,7 @@
         }, 5000); // 5 segundos por oferta
       }
 
-      // Inicializar
-      renderSlides();
+      // Inicializar el slider después de cargar las ofertas
       startSlider();
     </script>
   </body>
