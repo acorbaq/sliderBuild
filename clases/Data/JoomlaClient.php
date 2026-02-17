@@ -99,6 +99,15 @@ class JoomlaClient
                 $url = $this->baseUrl . '?' . http_build_query($params);
                 return $url;
                 break;
+            case 'producto':
+                $params = [
+                    'view' => 'productdetails',
+                    'virtuemart_product_id' => urlencode($section['section']),
+                    $hash_key => $this->token,
+                    'section' => urlencode($section['section']),
+                ];
+                $url = $this->baseUrl . '?' . http_build_query($params);
+                return $url;
             default:
                 header('Location:' . $this->baseUrl);
                 return $this->baseUrl;
